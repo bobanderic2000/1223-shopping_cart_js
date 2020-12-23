@@ -6,12 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // 刪除項目
   function deleteItem(e) {
     let cartItem = e.currentTarget.parentElement.parentElement
-    cartItem.remove()  
+    cartItem.remove()
+    updateTotal()
   }
   
-  total = document.querySelector('.total').innerText.replace('$', '')
-  
+  function updateTotal(){
+    let total = document.querySelector('.total').textContent.replace('$', '');
+    let cartItems = document.querySelectorAll('.cart-item');
+    cartItems.forEach(cartItem => {
+      let price = cartItem.querySelector('.cart-item-price').textContent.replace('$', '')
+      let quantity = cartItem.querySelector('.quantity').value
+      console.log(price);
+      // console.log(cartItems);
+    })
+  }
 
+  
 
 // this is the end  
 })
