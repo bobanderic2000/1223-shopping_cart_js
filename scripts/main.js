@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   inputs.forEach(input => {
     input.addEventListener('change', setQuantity)
   })
-
-  document.querySelectorAll('.add-item-btn').forEach(addItemBtn => {
+  // 加入購物車
+    document.querySelectorAll('.add-item-btn').forEach(addItemBtn => {
     addItemBtn.addEventListener('click', setCartItem)
   })
 
@@ -31,12 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 元件插入購物車內的第一順位
     const cart = document.querySelector('.cart tbody');
     cart.insertAdjacentElement('afterbegin', cartItemRow);
-    // 加入項目後重新計算
-    updateTotal();
     // 監聽，可刪除新增的項目
     cartItemRow.querySelectorAll('.trash-btn').forEach(trashBtn => {
       trashBtn.addEventListener('click', deleteItem)
     })
+    // 監聽，更動數量時可重新計算
+    cartItemRow.querySelector('.quantity').addEventListener('change', setQuantity);
+    // 加入項目後重新計算
+    updateTotal();
   }
 
 // 單品數量
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let quantity = cartItem.querySelector('.quantity').value;
       total += (price * quantity);  // 這行比較特別，容易忘，可以記一下
     });
-    document.querySelector('.total').textContent = `$${total}`;
+    document.querySelector('.total').textContent = `$${Math.round(total * 100) / 100}`;  // Math的方法比較不熟
   } 
 
 // 刪除項目
