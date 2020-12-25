@@ -15,14 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
 // 加入購物車
-  function setCartItem(addBtn) {
-    const title = addBtn.currentTarget.parentNode.querySelector('.card-title').textContent;
-    const itemPrice = addBtn.currentTarget.parentNode.querySelector('.price').textContent.replace('$', '');
+  function setCartItem(e) {
+    let cardTitle = e.currentTarget.parentNode.querySelector('.card-title').textContent;
+    const itemPrice = e.currentTarget.parentNode.querySelector('.price').textContent.replace('$', '');
+    // 加入購物車品項時，若購物車已有該品項，則增加購物車內品項數量即可 ---> 這段很重要
+    const cartItems = document.querySelectorAll('.cart-item');
+    for(let i = 0; i < cartItems.length; i++) {
+      const cartItem = cartItems[i]
+      let cartTitle = cartItem.querySelector('.cart-title').textContent;
+      if (cardTitle == cartTitle) {
+          cartItem.querySelector('.quantity').value = Number(cartItem.querySelector('.quantity').value) + 1;
+          updateTotal();
+          return;
+        }
+      }
     // 建立要插入購物車的元件
     let cartItemRow = document.createElement('tr');
     cartItemRow.className = 'cart-item'
     cartItemRow.innerHTML = `
-    <td>${title}</td>
+    <td class="cart-title">${cardTitle}</td>
     <td><input type="number" value="1" class="quantity"></td>
     <td class="cart-item-price">$${itemPrice}</td>
     <td class="subtotal">$${itemPrice}</td>
@@ -64,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cartItems.forEach(cartItem => {
       let price = cartItem.querySelector('.cart-item-price').textContent.replace('$', '');
       let quantity = cartItem.querySelector('.quantity').value;
+      cartItem.querySelector('.subtotal').textContent = `$${price * quantity}`
       total += (price * quantity);  // 這行比較特別，容易忘，可以記一下
     });
     document.querySelector('.total').textContent = `$${Math.round(total * 100) / 100}`;  // Math的方法比較不熟
